@@ -26,5 +26,8 @@ module Showcase
 
     #config for monitor log checker
     config.monitor_log=config_for(:monitor_log)
+
+    # Auto load lib
+    config.autoload_paths += %W(#{config.root}/lib)
   end
 end

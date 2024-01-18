@@ -17,7 +17,7 @@ class SearchController < ApplicationController
       format.json { @patients = @patients.page(params[:page]) }
       format.csv do
         # authorize! :export, Patient
-        EventLog.create({user: current_user, center: current_user.center, event: :export})
+        #EventLog.create({user: current_user, center: current_user.center, event: :export})
         filename = "Query-#{Time.now.strftime('%Y%m%d%H%M%S')}.csv"
         send_csv (by_position ? export_by_position(export_tables) : export(export_tables)), filename
       end
@@ -63,7 +63,7 @@ class SearchController < ApplicationController
       }
       format.csv do
         # authorize! :export, Patient
-        EventLog.create({user: current_user, center: current_user.center, event: :export})
+        #EventLog.create({user: current_user, center: current_user.center, event: :export})
         filename = "Query-#{Time.now.strftime('%Y%m%d%H%M%S')}.csv"
         send_csv export(export_tables), filename
       end

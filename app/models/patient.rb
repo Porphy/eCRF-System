@@ -1,5 +1,12 @@
 class Patient < ActiveRecord::Base
   extend Enumerize
+  include Export
+
+  # reserve the id；center_id和project_id暂时保留了，但应该不能直接显示出中心名和项目名（在export.rb的values_for_export函数里完成了id到中文的转换）
+  EXPORT_IGNORED_COLUMNS = %w(id status user_id checker_id created_at updated_at)
+  COLUMN_TRANSFORMATIONS = {ID_number: :force_string,
+                            phone_number_1: :force_string,
+                            phone_number_2: :force_string }
 
   enumerize :status,
             in: {
@@ -32,6 +39,8 @@ class Patient < ActiveRecord::Base
   has_many :biological_sample_collections, dependent: :destroy
   has_many :followups, dependent: :destroy
 
+  has_one :export_cache  #新增导出
+
   attr_accessor :center_name
   attr_accessor :overdue_courses
   attr_accessor :overdue_followups
@@ -42,6 +51,7 @@ class Patient < ActiveRecord::Base
   validates :hosptalization_number,presence: true
 
   before_create :convertStatusToEstablished
+  after_save :set_export_cache
 
   def convertStatusToEstablished
     self.status=0
@@ -65,6 +75,58 @@ class Patient < ActiveRecord::Base
     else
       self.overdue_followups=self.status
     end
+  end
+
+  private
+  def set_export_cache(update_all = false)
+    tables = Export::EXPORT_TABLE_NAMES
+    cache = export_cache
+
+    if cache
+      if update_all
+        cache.update(to_csv(tables))
+      else
+        cache.update(to_csv())
+      end
+    else
+      create_export_cache(to_csv(tables))
+    end
+  end
+
+  public
+  def to_csv(tables = [], options = {})
+    # tables &= Export::EXPORT_TABLE_NAMES
+    tables = tables - ['patient']
+
+    split, col_sep, row_sep, trans =
+        options.fetch(:split, true), options.fetch(:col_sep, ','), options.fetch(:row_sep, "\n"), options.fetch(:translate, true)
+
+    csv_op = { row_sep: nil, col_sep: col_sep }
+
+    index = tables.find_index('operation')
+    tables.insert(index + 1, 'operation_lesions') unless index.nil?
+
+    hsh ={ 'patient' => values_for_export(trans).to_csv(csv_op) }
+
+    tables.each do |t|
+      _tmp = self.public_send(t)
+
+      case t
+        when 'operation_lesions', 'followups', 'inbodies', 'metabolisms', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs'
+            _tmp = _tmp.order('created_at desc') if t == 'followups'
+            _size = _tmp.columns_for_export.size
+            Export::EXPORT_LIMIT[t.to_sym].times do |i|
+              vals = _tmp[i].nil? ?
+                  Array.new(_size) : _tmp[i].values_for_export(trans)
+              hsh["#{t.singularize}_#{i}"] = vals.to_csv(csv_op)
+            end
+        else
+          vals = _tmp.nil? ?
+              Array.new(t.singularize.classify.constantize.columns_for_export(false, true).size) : _tmp.values_for_export(trans)
+          hsh[t] = vals.to_csv(csv_op)
+      end
+    end
+    split ? hsh : hsh.values.join(col_sep).concat(row_sep)
   end
 
 end

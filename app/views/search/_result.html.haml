@@ -19,20 +19,20 @@
 
   = paginate @patients, window: 10
 
-  -#-if can? :export, Patient
-  -#  %br
-  -#  %h3
-  -#    导出结果
-  -#    %small 请选择需要导出的表
-  -#    = form_for :export, url: url_for(params.merge(format: :csv)), html: {id: :export}  do |f|
-  -#      = f.collection_check_boxes :table, Patient::EXPORT_TABLE_NAMES.zip(I18n.t(Patient::EXPORT_TABLE_NAMES, scope: 'activerecord.models')), :first, :last
-  -#      %div
-  -#        = f.check_box :select_all
-  -#        = f.label :select_all, t(:select_all)
-  -#        = f.check_box :by_position
-  -#        = f.label :by_position, '手术病灶分左右乳导出'
-  -#      %div
-  -#        = f.submit t(:export), class: [:button, :tiny, :radius]
+  -if can? :export, Patient
+    %br
+    %h3
+      导出结果
+      %small 请选择需要导出的表
+      = form_for :export, url: url_for(params.merge(format: :csv)), html: {id: :export}  do |f|
+        = f.collection_check_boxes :table, Patient::EXPORT_TABLE_NAMES.zip(I18n.t(Patient::EXPORT_TABLE_NAMES, scope: 'activerecord.models')), :first, :last
+        %div
+          -# = f.check_box :select_all
+          -# = f.label :select_all, t(:select_all)
+          -# = f.check_box :by_position
+          -# = f.label :by_position, '手术病灶分左右乳导出'
+        %div
+          = f.submit t(:export), class: [:button, :tiny, :radius]
 
 = content_for :add_js do
   = javascript_include_tag 'search'

@@ -2,6 +2,7 @@ zh-CN:
   activerecord:
     models:
       user: 用户
+      patient: "基本信息"
 
     attributes_common: &common
       remarks: "备注"
