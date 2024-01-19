@@ -73,10 +73,10 @@ module Export
 
         if col == 'center_id' && center_id_index
             # 使用 center 关联对象获取中心名称
-            val = self.center&.name
+            val = self.center ? self.center.name : nil
         elsif col == 'project_id' && project_id_index
             # 使用 project 关联对象获取中心名称
-            val = self.project&.name
+            val = self.project ? self.project.name : nil
         else
             val = self.send(col)
             if self.class.try(:flag_columns).try(:include?, col)
