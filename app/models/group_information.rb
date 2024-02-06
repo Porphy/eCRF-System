@@ -1,10 +1,13 @@
 class GroupInformation < ActiveRecord::Base
+  include Export
+
   belongs_to :patient
   belongs_to :research_group
 
   after_create :set_course_monitor
   after_create :set_followup_monitor
 
+  after_save :set_export_cache
 
 
   # private

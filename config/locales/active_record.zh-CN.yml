@@ -3,6 +3,7 @@ zh-CN:
     models:
       user: 用户
       patient: "基本信息"
+      group_information: "分组信息"
 
     attributes_common: &common
       remarks: "备注"
