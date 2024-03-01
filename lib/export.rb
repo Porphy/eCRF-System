@@ -20,7 +20,7 @@ module Export
   # all concerned methods that accepts tables array are assumed it contains 'patient'
   # and EXPORT_TABLE_NAMES is the all possible elements of that array
   #EXPORT_TABLE_NAMES  = %w( patient history clinical imaging neoadjuvant pathology operation twenty_one_gene adjuvant followups metabolisms inbodies blood_samples lesion_primary_sps lesion_blood_sps hrrs)
-  EXPORT_TABLE_NAMES  = %w( patient group_information)
+  EXPORT_TABLE_NAMES  = %w( patient group_information basement_assessment death_record)
 
   def self.header_for_export(tables, trans = true, limit = {})
     # tables &= EXPORT_TABLE_NAMES
@@ -103,17 +103,18 @@ module Export
 
     if nested
       nested_attributes_options.keys.each do |attr|
+        tmp = self.public_send(attr)
+        size = tmp.columns_for_export(false, true).size
         limit = EXPORT_LIMIT[attr]
         if limit
-          tmp = self.public_send(attr)
-          size = tmp.columns_for_export(false, true).size
           limit.times do |i|
             vals += tmp[i].nil? ?
                  Array.new(size) : tmp[i].values_for_export(trans, true)
-          end
+        end
 
         else
-          vals += self.public_send(attr).values_for_export(trans, true)
+          vals += tmp.is_a?(ActiveRecord::Associations::CollectionProxy) && tmp.empty? ?
+              Array.new(size) : tmp.values_for_export(trans, true)
         end
       end
     end

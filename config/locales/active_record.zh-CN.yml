@@ -4,6 +4,8 @@ zh-CN:
       user: 用户
       patient: "基本信息"
       group_information: "分组信息"
+      basement_assessment: "基线评估"
+      death_record: "死亡记录"
 
     attributes_common: &common
       remarks: "备注"

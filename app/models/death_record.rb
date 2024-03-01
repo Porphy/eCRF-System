@@ -1,6 +1,7 @@
 class DeathRecord < ActiveRecord::Base
   extend Enumerize
   include Constant
+  include Export
 
   enumerize :relation_with_medication, in: RELAITHDRUGS_OPT
   enumerize :cause_of_death, in: DEATH_OPT
@@ -16,5 +17,7 @@ class DeathRecord < ActiveRecord::Base
   def convertStatusToQuit
     self.patient.update(status:4)
   end
+
+  after_save :set_export_cache
 
 end

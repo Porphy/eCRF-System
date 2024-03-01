@@ -1,6 +1,7 @@
 class BasementAssessment < ActiveRecord::Base
   extend Enumerize
   include Constant
+  include Export
 
   enumerize :pregnancy_test_result, in:TRIPLET_OPT_II
   enumerize :electrocarddiogram_diagnosis, in:DIAGNOSE_OPT
@@ -29,6 +30,7 @@ class BasementAssessment < ActiveRecord::Base
                                 reject_if: :all_blank, allow_destroy: true
 
   before_save :set_BMI
+  after_save :set_export_cache
 
   def set_BMI
     ( self.BMI = (weight / (height * height)).round(2) ) unless height.nil? || weight.nil? || weight == 0 || height == 0
