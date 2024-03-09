@@ -151,11 +151,13 @@ class SearchController < ApplicationController
     index = tables_for_header.find_index('operation')
     tables_for_header.insert(index + 1, 'operation_lesions') unless index.nil?
 
-    special = 'followups'
-    if _tables.include? special
-      _tables.delete special
-      Export::EXPORT_LIMIT[special.to_sym].times do |t|
-        _tables << "#{special.singularize}_#{t}"
+    special = ['followups', 'basement_assessments']
+    special.each do |s|
+      if _tables.include? s
+        _tables.delete s
+        Export::EXPORT_LIMIT[s.to_sym].times do |t|
+          _tables << "#{s.singularize}_#{t}"
+        end
       end
     end
 
@@ -186,16 +188,18 @@ class SearchController < ApplicationController
 
     tbl = tables.dup
 
-    tbl_tail = tbl & %w(adjuvant followups)
+    tbl_tail = tbl & %w(adjuvant followups basement_assessments)
     tbl_head = tbl - tbl_tail
 
-    special = 'followups'
-    if tbl.include? special
-      tbl.delete special
-      tbl_tail.delete special
-      Export::EXPORT_LIMIT[special.to_sym].times do |t|
-        tbl_tail << "#{special.singularize}_#{t}"
-        tbl << tbl_tail.last
+    special = ['followups', 'basement_assessments']
+    special.each do |s|
+      if tbl.include? s
+        tbl.delete s
+        tbl_tail.delete s
+        Export::EXPORT_LIMIT[s.to_sym].times do |t|
+          tbl_tail << "#{s.singularize}_#{t}"
+          tbl << tbl_tail.last
+        end
       end
     end
 
@@ -212,7 +216,7 @@ class SearchController < ApplicationController
                         else
                           [Array.new(OperationLesion.columns_for_export.size).to_csv(row_sep: nil),
                            Export.header_for_export(tbl_head) + ['手术.是否双乳病灶'] +
-                               Export.header_for_export([les], true, operation_lesions: 2 ) + Export.header_for_export(tables & %w(adjuvant followups))]
+                               Export.header_for_export([les], true, operation_lesions: 2 ) + Export.header_for_export(tables & %w(adjuvant followups basement_assessments))]
                         end
 
     # Join version, similar performance, why?

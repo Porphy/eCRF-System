@@ -5,6 +5,8 @@ zh-CN:
       patient: "基本信息"
       group_information: "分组信息"
       basement_assessment: "基线评估"
+      blood_routine: "血常规"
+      blood_biochemistry: "血生化"
       death_record: "死亡记录"
 
     attributes_common: &common

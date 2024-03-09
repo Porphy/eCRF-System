@@ -10,7 +10,7 @@ module Export
       pathology_lesions: 2, neo_cu_lesions: 4, neo_mmg_lesions: 4, neo_mri_lesions: 4,
       neo_us_lesions: 4, adj_cr_lesions: 4, adj_mdts:2,neo_mdts:2,twenty_eight_genes: 1, twenty_one_and_seven_genes: 1,
       metabolisms: 5, inbodies: 5, blood_samples: 5, blood_specs: 5, lesion_primary_sps: 5, lesion_primary_specs: 5, lesion_blood_sps: 5, lesion_blood_specs: 5,
-      hrrs: 5, hrr_genetics: 5, hrr_systems: 5, hrr_germlines: 5 
+      hrrs: 5, hrr_genetics: 5, hrr_systems: 5, hrr_germlines: 5 , basement_assessments: 5, blood_routines: 5, blood_biochemistries: 5,
   }
 
   #EXPORT_IGNORED_COLUMNS = %w(id user_id center_id patient_id checker_id twenty_one_gene_id created_at updated_at checked_at)
@@ -33,7 +33,7 @@ module Export
       model_name = trans ? I18n.t(klass.model_name.i18n_key, scope: 'exports.models', default: klass.model_name.to_s) : klass.model_name.to_s
 
       case t
-        when 'operation_lesions', 'followups', 'metabolisms', 'inbodies', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs'
+        when 'operation_lesions', 'followups', 'metabolisms', 'inbodies', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs', 'basement_assessments'
           ob.concat self.concat_column_names(t, nil, limit[t.to_sym], trans)
         else
           ob.concat klass.columns_for_export(trans, true).map{ |r| model_name + '.' + r}
