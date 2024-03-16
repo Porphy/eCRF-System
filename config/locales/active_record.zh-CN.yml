@@ -8,6 +8,7 @@ zh-CN:
       blood_routine: "血常规"
       blood_biochemistry: "血生化"
       death_record: "死亡记录"
+      adverse_events: "不良事件"
 
     attributes_common: &common
       remarks: "备注"

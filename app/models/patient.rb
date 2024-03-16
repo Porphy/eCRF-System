@@ -112,7 +112,7 @@ class Patient < ActiveRecord::Base
       _tmp = self.public_send(t)
 
       case t
-        when 'operation_lesions', 'followups', 'inbodies', 'metabolisms', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs', 'basement_assessments'
+        when 'operation_lesions', 'followups', 'inbodies', 'metabolisms', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs', 'basement_assessments', 'adverse_events'
             _tmp = _tmp.order('created_at desc') if t == 'followups'
             _size = _tmp.columns_for_export.size
             Export::EXPORT_LIMIT[t.to_sym].times do |i|
@@ -121,7 +121,7 @@ class Patient < ActiveRecord::Base
               hsh["#{t.singularize}_#{i}"] = vals.to_csv(csv_op)
             end
         else
-          vals = _tmp.nil? ?
+          vals = (_tmp.nil? or (_tmp.is_a?(ActiveRecord::Associations::CollectionProxy) && _tmp.empty?))?
               Array.new(t.singularize.classify.constantize.columns_for_export(false, true).size) : _tmp.values_for_export(trans)
           hsh[t] = vals.to_csv(csv_op)
       end
