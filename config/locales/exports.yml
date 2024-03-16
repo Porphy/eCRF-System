@@ -46,3 +46,6 @@ zh-CN:
       blood_biochemistry: "血生化"
       death_record: "死亡记录"
       adverse_event: "不良事件"
+      radiation_therapy: "放射治疗"
+      concomitant_drug: "合并用药"
+      biological_sample_collection: "生物样本采集"

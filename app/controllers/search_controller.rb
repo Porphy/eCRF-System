@@ -151,7 +151,7 @@ class SearchController < ApplicationController
     index = tables_for_header.find_index('operation')
     tables_for_header.insert(index + 1, 'operation_lesions') unless index.nil?
 
-    special = ['followups', 'basement_assessments', 'adverse_events']
+    special = ['followups', 'basement_assessments', 'adverse_events', 'radiation_therapies', 'concomitant_drugs', 'biological_sample_collections']
     special.each do |s|
       if _tables.include? s
         _tables.delete s
