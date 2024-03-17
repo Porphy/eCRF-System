@@ -17,6 +17,7 @@ zh-CN:
       blood_routine_med: "血常规"
       blood_biochemistry_med: "血生化"
       tumor_maker_med: "肿瘤标志物"
+      followups: "随访"
 
     attributes_common: &common
       remarks: "备注"

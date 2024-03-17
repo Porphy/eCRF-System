@@ -21,7 +21,7 @@ module Export
   # all concerned methods that accepts tables array are assumed it contains 'patient'
   # and EXPORT_TABLE_NAMES is the all possible elements of that array
   #EXPORT_TABLE_NAMES  = %w( patient history clinical imaging neoadjuvant pathology operation twenty_one_gene adjuvant followups metabolisms inbodies blood_samples lesion_primary_sps lesion_blood_sps hrrs)
-  EXPORT_TABLE_NAMES  = %w( patient group_information basement_assessment medication_completion death_record reserach_completion adverse_events radiation_therapies concomitant_drugs biological_sample_collections)
+  EXPORT_TABLE_NAMES  = %w( patient group_information basement_assessment medication_completion death_record reserach_completion followups adverse_events radiation_therapies concomitant_drugs biological_sample_collections)
 
   def self.header_for_export(tables, trans = true, limit = {})
     # tables &= EXPORT_TABLE_NAMES
