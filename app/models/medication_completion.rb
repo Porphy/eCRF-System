@@ -1,6 +1,7 @@
 class MedicationCompletion < ActiveRecord::Base
   extend Enumerize
   include Constant
+  include Export
 
   enumerize :physical_examination, in: TWOTUPLE_OPT
   enumerize :breast_Bultra_diagnose, in: DIAGNOSE_OPT
@@ -29,6 +30,8 @@ class MedicationCompletion < ActiveRecord::Base
   after_create :convertStatusToFollowup
   after_create :initFollowupMonitor
   after_create :convertStatusToQuit
+
+  after_save :set_export_cache
 
   def convertStatusToFollowup
     if self.if_followup

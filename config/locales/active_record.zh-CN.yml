@@ -13,6 +13,10 @@ zh-CN:
       concomitant_drugs: "合并用药"
       biological_sample_collections: "生物样本采集"
       reserach_completion: "研究完成/终止访视"
+      medication_completion: "用药完成/终止访视"
+      blood_routine_med: "血常规"
+      blood_biochemistry_med: "血生化"
+      tumor_maker_med: "肿瘤标志物"
 
     attributes_common: &common
       remarks: "备注"
