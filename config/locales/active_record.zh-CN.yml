@@ -18,6 +18,10 @@ zh-CN:
       blood_biochemistry_med: "血生化"
       tumor_maker_med: "肿瘤标志物"
       followups: "随访"
+      courses: "疗程"
+      blood_routine_thes: "血常规"
+      blood_biochemistry_thes: "血生化"
+      course_medications: "疗程用药"
 
     attributes_common: &common
       remarks: "备注"

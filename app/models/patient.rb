@@ -112,7 +112,7 @@ class Patient < ActiveRecord::Base
       _tmp = self.public_send(t)
 
       case t
-        when 'operation_lesions', 'followups', 'inbodies', 'metabolisms', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs', 'basement_assessments', 'adverse_events', 'radiation_therapies', 'concomitant_drugs', 'biological_sample_collections'
+        when 'operation_lesions', 'followups', 'inbodies', 'metabolisms', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs', 'basement_assessments', 'adverse_events', 'radiation_therapies', 'concomitant_drugs', 'biological_sample_collections', 'courses'
             _tmp = _tmp.order('created_at desc') if t == 'followups'
             _size = _tmp.columns_for_export.size
             Export::EXPORT_LIMIT[t.to_sym].times do |i|

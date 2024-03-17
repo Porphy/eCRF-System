@@ -11,7 +11,7 @@ module Export
       neo_us_lesions: 4, adj_cr_lesions: 4, adj_mdts:2,neo_mdts:2,twenty_eight_genes: 1, twenty_one_and_seven_genes: 1,
       metabolisms: 5, inbodies: 5, blood_samples: 5, blood_specs: 5, lesion_primary_sps: 5, lesion_primary_specs: 5, lesion_blood_sps: 5, lesion_blood_specs: 5,
       hrrs: 5, hrr_genetics: 5, hrr_systems: 5, hrr_germlines: 5 , basement_assessments: 5, blood_routines: 5, blood_biochemistries: 5, adverse_events: 5, radiation_therapies: 5, concomitant_drugs: 5, biological_sample_collections: 5,
-      blood_routine_meds: 5, blood_biochemistry_meds: 5, tumor_maker_meds: 5
+      blood_routine_meds: 5, blood_biochemistry_meds: 5, tumor_maker_meds: 5, courses: 5, blood_routine_thes: 5, blood_biochemistry_thes: 5, course_medications: 5,
   }
 
   #EXPORT_IGNORED_COLUMNS = %w(id user_id center_id patient_id checker_id twenty_one_gene_id created_at updated_at checked_at)
@@ -21,7 +21,7 @@ module Export
   # all concerned methods that accepts tables array are assumed it contains 'patient'
   # and EXPORT_TABLE_NAMES is the all possible elements of that array
   #EXPORT_TABLE_NAMES  = %w( patient history clinical imaging neoadjuvant pathology operation twenty_one_gene adjuvant followups metabolisms inbodies blood_samples lesion_primary_sps lesion_blood_sps hrrs)
-  EXPORT_TABLE_NAMES  = %w( patient group_information basement_assessment medication_completion death_record reserach_completion followups adverse_events radiation_therapies concomitant_drugs biological_sample_collections)
+  EXPORT_TABLE_NAMES  = %w( patient group_information basement_assessment medication_completion death_record reserach_completion followups adverse_events radiation_therapies concomitant_drugs biological_sample_collections courses)
 
   def self.header_for_export(tables, trans = true, limit = {})
     # tables &= EXPORT_TABLE_NAMES
@@ -34,7 +34,7 @@ module Export
       model_name = trans ? I18n.t(klass.model_name.i18n_key, scope: 'exports.models', default: klass.model_name.to_s) : klass.model_name.to_s
 
       case t
-        when 'operation_lesions', 'followups', 'metabolisms', 'inbodies', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs', 'adverse_events', 'radiation_therapies', 'concomitant_drugs', 'biological_sample_collections'
+        when 'operation_lesions', 'followups', 'metabolisms', 'inbodies', 'blood_samples', 'lesion_primary_sps', 'lesion_blood_sps', 'hrrs', 'adverse_events', 'radiation_therapies', 'concomitant_drugs', 'biological_sample_collections', 'courses'
           ob.concat self.concat_column_names(t, nil, limit[t.to_sym], trans)
         else
           ob.concat klass.columns_for_export(trans, true).map{ |r| model_name + '.' + r}

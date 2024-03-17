@@ -1,6 +1,7 @@
 class Course < ActiveRecord::Base
   extend Enumerize
   include Constant
+  include Export
 
   belongs_to :patient
 
@@ -19,6 +20,7 @@ class Course < ActiveRecord::Base
   after_create :convertStatusToResearching
   after_create :setCourseMonitor
   before_destroy :rollBackMonitor
+  after_save :set_export_cache
 
   validates :patient_id, presence: true
   validates :interview, presence: true
@@ -38,6 +40,24 @@ class Course < ActiveRecord::Base
 
   def convertStatusToResearching
       self.patient.update(status:1)
+  end
+
+  def set_export_cache
+    begin
+      index = patient.courses.index(self)
+      _tmp = patient.courses.order('created_at desc')
+      _size = _tmp.columns_for_export.size
+      cache = ExportCache.find_by(patient_id: patient_id)
+      hsh = {}
+      Export::EXPORT_LIMIT[model_name.plural.to_sym].times do |i|
+        vals = _tmp[i].nil? ?
+            Array.new(_size) : _tmp[i].values_for_export
+        hsh["#{model_name.singular}_#{i}"] = vals.to_csv(row_sep: nil)
+      end
+      cache.update(hsh)
+    rescue
+      
+    end
   end
 
 end

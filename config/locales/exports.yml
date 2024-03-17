@@ -54,3 +54,7 @@ zh-CN:
       blood_routine_med: "血常规"
       blood_biochemistry_med: "血生化"
       tumor_maker_med: "肿瘤标志物"
+      course: "疗程"
+      blood_routine_the: "血常规"
+      blood_biochemistry_the: "血生化"
+      course_medication: "疗程用药"
