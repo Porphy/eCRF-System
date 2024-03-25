@@ -151,7 +151,7 @@ class SearchController < ApplicationController
     index = tables_for_header.find_index('operation')
     tables_for_header.insert(index + 1, 'operation_lesions') unless index.nil?
 
-    special = ['followups', 'basement_assessments', 'adverse_events', 'radiation_therapies', 'concomitant_drugs', 'biological_sample_collections', 'courses']
+    special = ['followups', 'adverse_events', 'radiation_therapies', 'concomitant_drugs', 'biological_sample_collections', 'courses']
     special.each do |s|
       if _tables.include? s
         _tables.delete s
@@ -188,10 +188,10 @@ class SearchController < ApplicationController
 
     tbl = tables.dup
 
-    tbl_tail = tbl & %w(adjuvant followups basement_assessments)
+    tbl_tail = tbl & %w(adjuvant followups)
     tbl_head = tbl - tbl_tail
 
-    special = ['followups', 'basement_assessments']
+    special = ['followups']
     special.each do |s|
       if tbl.include? s
         tbl.delete s
@@ -216,7 +216,7 @@ class SearchController < ApplicationController
                         else
                           [Array.new(OperationLesion.columns_for_export.size).to_csv(row_sep: nil),
                            Export.header_for_export(tbl_head) + ['手术.是否双乳病灶'] +
-                               Export.header_for_export([les], true, operation_lesions: 2 ) + Export.header_for_export(tables & %w(adjuvant followups basement_assessments))]
+                               Export.header_for_export([les], true, operation_lesions: 2 ) + Export.header_for_export(tables & %w(adjuvant followups))]
                         end
 
     # Join version, similar performance, why?

@@ -10,7 +10,7 @@ module Export
       pathology_lesions: 2, neo_cu_lesions: 4, neo_mmg_lesions: 4, neo_mri_lesions: 4,
       neo_us_lesions: 4, adj_cr_lesions: 4, adj_mdts:2,neo_mdts:2,twenty_eight_genes: 1, twenty_one_and_seven_genes: 1,
       metabolisms: 5, inbodies: 5, blood_samples: 5, blood_specs: 5, lesion_primary_sps: 5, lesion_primary_specs: 5, lesion_blood_sps: 5, lesion_blood_specs: 5,
-      hrrs: 5, hrr_genetics: 5, hrr_systems: 5, hrr_germlines: 5 , basement_assessments: 5, blood_routines: 5, blood_biochemistries: 5, adverse_events: 5, radiation_therapies: 5, concomitant_drugs: 5, biological_sample_collections: 5,
+      hrrs: 5, hrr_genetics: 5, hrr_systems: 5, hrr_germlines: 5 , blood_routines: 5, blood_biochemistries: 5, adverse_events: 5, radiation_therapies: 5, concomitant_drugs: 5, biological_sample_collections: 5,
       blood_routine_meds: 5, blood_biochemistry_meds: 5, tumor_maker_meds: 5, courses: 5, blood_routine_thes: 5, blood_biochemistry_thes: 5, course_medications: 5,
   }
 
@@ -104,18 +104,17 @@ module Export
 
     if nested
       nested_attributes_options.keys.each do |attr|
-        tmp = self.public_send(attr)
-        size = tmp.columns_for_export(false, true).size
         limit = EXPORT_LIMIT[attr]
         if limit
+          tmp = self.public_send(attr)
+          size = tmp.columns_for_export(false, true).size
           limit.times do |i|
             vals += tmp[i].nil? ?
                  Array.new(size) : tmp[i].values_for_export(trans, true)
-        end
+          end
 
         else
-          vals += tmp.is_a?(ActiveRecord::Associations::CollectionProxy) && tmp.empty? ?
-              Array.new(size) : tmp.values_for_export(trans, true)
+          vals += self.public_send(attr).values_for_export(trans, true)
         end
       end
     end

@@ -121,7 +121,7 @@ class Patient < ActiveRecord::Base
               hsh["#{t.singularize}_#{i}"] = vals.to_csv(csv_op)
             end
         else
-          vals = (_tmp.nil? or (_tmp.is_a?(ActiveRecord::Associations::CollectionProxy) && _tmp.empty?))?
+          vals = _tmp.nil? ?
               Array.new(t.singularize.classify.constantize.columns_for_export(false, true).size) : _tmp.values_for_export(trans)
           hsh[t] = vals.to_csv(csv_op)
       end
