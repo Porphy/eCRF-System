@@ -27,8 +27,8 @@
       = form_for :export, url: url_for(params.merge(format: :csv)), html: {id: :export}  do |f|
         = f.collection_check_boxes :table, Patient::EXPORT_TABLE_NAMES.zip(I18n.t(Patient::EXPORT_TABLE_NAMES, scope: 'activerecord.models')), :first, :last
         %div
-          -# = f.check_box :select_all
-          -# = f.label :select_all, t(:select_all)
+          = f.check_box :select_all
+          = f.label :select_all, t(:select_all)
           -# = f.check_box :by_position
           -# = f.label :by_position, '手术病灶分左右乳导出'
         %div
